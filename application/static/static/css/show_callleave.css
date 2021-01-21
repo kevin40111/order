@@ -1,0 +1,23 @@
+th, td {
+	padding: 0 !important;
+	text-align: center !important;
+	vertical-align: middle !important;
+}
+caption {
+	font-size: 1.8em;
+	line-height: 2em;
+}
+#checkField > td:not(.head) {
+	cursor: pointer;
+}
+td.holiday, th.holiday {
+	background-color: #EAEAEA !important;
+}
+td.check {
+	background-color: orange !important;
+	font-weight: bold;
+}
+
+p.text-left {
+	text-align: left !important;
+}

@@ -1,0 +1,7 @@
+.member-table img {
+	/* max-width: 200px; */
+}
+
+.member-table tr td:nth-child(1) img {
+	width: 120px;
+}
