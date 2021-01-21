@@ -121,6 +121,9 @@ $(function(){
 							</li>
 						</ul>
 					</div>
+					<div>
+						<h4>Welecome Back : <?=$this->session->userdata('name')?></h4>
+					</div>
 				</div>
 			</div>
 		</div>

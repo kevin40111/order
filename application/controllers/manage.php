@@ -1,20 +1,20 @@
 <?if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-	
-class Manage extends CI_Controller {		
+
+class Manage extends CI_Controller {
 	function __construct() {
     // Call the Model constructor
     parent::__construct();
-    if ($this->session->userdata('uid') == "" || 
-        (!(($this->session->userdata('dep_id') == "1") || ($this->session->userdata('dep_id') == "2"))) ) {
+    if ($this->session->userdata('uid') == "" ||
+        (!($this->session->userdata('dep_id') == "1")) ) {
 			header("Location: /login");
 			exit();
 		}
-  }	
-			
+  }
+
 	function index() {
 		//model
 		$this->load->model('member_model');
-		
+
 		//view
 		$this->load->view('header', array(
 			'page' => 'manage'
@@ -29,12 +29,12 @@ class Manage extends CI_Controller {
 		));
 		$this->load->view('footer');
 	}
-	
+
 	function member_add_view() {
-		
+
 		//model
 		$this->load->model('member_model');
-		
+
 		//view
 		$this->load->view('header', array(
 			'page' => 'manage'
@@ -48,7 +48,7 @@ class Manage extends CI_Controller {
 		));
 		$this->load->view('footer');
 	}
-	
+
 	function member_check_view() {
 		//model
 		$this->load->model('member_model');
@@ -67,11 +67,11 @@ class Manage extends CI_Controller {
 		));
 		$this->load->view('footer');
 	}
-	
+
 	function vote_list() {
 		//model
 		$this->load->model('vote_model');
-		
+
 		//view
 		$this->load->view('header', array(
 			'page' => 'manage'
@@ -110,8 +110,8 @@ class Manage extends CI_Controller {
 		if(isset($_POST['bord_id'])){
 			$bord_id = $_POST['bord_id'];
 			$this->funbord_model->delete_funbord($bord_id);
-			
-		} 
+
+		}
 	}
 }
 ?>
