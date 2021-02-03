@@ -99,6 +99,10 @@
         <div class='tab-content'>
             <? foreach ($shops as $shop):?>
             <div class='tab-pane' id='<?= $shop->id?>'>
+                <div style="padding-bottom:10px" >
+                    <b> 商家資訊: </b> <?=$shop->remark ?>
+                </div>
+
                 <table class='table table-bordered'>
                     <thead>
                         <tr>

@@ -73,7 +73,7 @@
 <body>
   <div id='bg'>
 	<div id="container">
-		<h3>還迎來到點餐系統</h3>
+		<h3>Cere 點餐系統</h3>
 		<?= form_open('/login/checkID')?>
 			<p>
 				<label>帳號：</label>
