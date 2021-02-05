@@ -23,7 +23,7 @@ class Order_Model extends CI_Model {
     }
 
     function update_expire($uid,$expire){
-        $data = array('expire_time'=>date('Y-m-d H:i:s', $expire));
+        $data = array('expire_time'=>date('Y-m-d H:i:s', substr($expire, 0, 10)));
         $this->db->where("id",$uid);
         $this->db->update('order',$data);
         return true;
