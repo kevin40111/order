@@ -75,19 +75,27 @@
         var $this = $(this);
 
         switch ($this.data('type')) {
-        case 'shop':
-            shop();
-            break;
-        case 'dep':
-            dep();
-            break;
-        case 'person':
-            person();
-            break;
+            case 'shop':
+                shop();
+                break;
+            case 'dep':
+                dep();
+                break;
+            case 'person':
+                person();
+                break;
         }
 
         $(".type-seelctor").removeClass('btn-success').addClass('btn-info');
         $this.addClass('btn-success').removeClass('btn-info');
+
+        $("td").click(function() {
+            if( $(this).css('color') == 'rgb(255, 0, 0)' ) {
+                $(this).css("color", "black");
+            } else {
+                $(this).css("color", "red");
+            }
+        });
     });
 
     shop = function () {
@@ -183,9 +191,6 @@
             name, tbl, html, item, totalPrice,
             container = $("#container");
 
-
-
-
         container.empty();
 
         for (name in grp) {
@@ -205,6 +210,5 @@
             container.append(tbl);
         }
     }
-
     shop();
 </script>
