@@ -49,7 +49,7 @@ class Order_Model extends CI_Model {
     }
 
     function get_my_order($orderID = -1) {
-        return $this->db->query("SELECT id, (SELECT price FROM shop_item WHERE id = item_id) AS price, (SELECT name FROM shop_item WHERE id = item_id) AS item, count, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END) AS type_one, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END) AS type_two FROM `order_item` WHERE order_id = ? AND member_id = ?", array($orderID, $this->session->userdata('uid')))->result();
+        return $this->db->query("SELECT id, backup, (SELECT price FROM shop_item WHERE id = item_id) AS price, (SELECT name FROM shop_item WHERE id = item_id) AS item, count, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END) AS type_one, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END) AS type_two FROM `order_item` WHERE order_id = ? AND member_id = ?", array($orderID, $this->session->userdata('uid')))->result();
     }
 
 	function get_all_order_ordered_by_member($orderID = -1)
@@ -58,7 +58,7 @@ class Order_Model extends CI_Model {
 	}
 
     function get_all_order($orderID = -1) {
-        return $this->db->query("SELECT id, (SELECT name FROM shop WHERE id = (SELECT shop_id FROM shop_item WHERE id = item_id)) AS shop, (SELECT phone FROM shop WHERE id = (SELECT shop_id FROM shop_item WHERE id = item_id)) AS shop_phone, (SELECT name FROM member WHERE id = member_id) AS member, (SELECT start_date FROM member WHERE id = member_id) AS member_old, ( SELECT name FROM department WHERE id = (SELECT dep_id FROM member WHERE id = member_id)) AS department, ( SELECT id FROM department WHERE id = (SELECT dep_id FROM member WHERE id = member_id)) AS department_id, (SELECT price FROM shop_item WHERE id = item_id) * count AS total_price, (SELECT price FROM shop_item WHERE id = item_id) AS price, concat((SELECT name FROM shop_item WHERE id = item_id), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL AND (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ' (' END),(CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '' WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ', ' END), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END),  (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL AND (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ')' END)) AS item, count, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END) AS type_one, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END) AS type_two FROM `order_item` WHERE order_id = ? ORDER BY item_id ASC", array($orderID))->result();
+        return $this->db->query("SELECT id, backup, (SELECT name FROM shop WHERE id = (SELECT shop_id FROM shop_item WHERE id = item_id)) AS shop, (SELECT phone FROM shop WHERE id = (SELECT shop_id FROM shop_item WHERE id = item_id)) AS shop_phone, (SELECT name FROM member WHERE id = member_id) AS member, (SELECT start_date FROM member WHERE id = member_id) AS member_old, ( SELECT name FROM department WHERE id = (SELECT dep_id FROM member WHERE id = member_id)) AS department, ( SELECT id FROM department WHERE id = (SELECT dep_id FROM member WHERE id = member_id)) AS department_id, (SELECT price FROM shop_item WHERE id = item_id) * count AS total_price, (SELECT price FROM shop_item WHERE id = item_id) AS price, concat((SELECT name FROM shop_item WHERE id = item_id), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL AND (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ' (' END),(CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '' WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ', ' END), (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END),  (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL AND (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '' ELSE ')' END)) AS item, count, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_one) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_one) END) AS type_one, (CASE WHEN (SELECT `option` FROM `shop_customerize` WHERE id = type_two) IS NULL THEN '無' ELSE (SELECT `option` FROM `shop_customerize` WHERE id = type_two) END) AS type_two FROM `order_item` WHERE order_id = ? ORDER BY item_id ASC", array($orderID))->result();
 		//
     }
 
@@ -88,7 +88,7 @@ class Order_Model extends CI_Model {
         return $list;
     }
 
-    function add_item_order($orderID = -1, $itemID, $count = 1, $typeOne = -1, $typeTwo = -1) {
+    function add_item_order($orderID = -1, $itemID, $count = 1, $typeOne = -1, $typeTwo = -1, $backup = '') {
         if ($orderID == -1 || !isset($itemID)) {
             return false;
         }
@@ -99,7 +99,8 @@ class Order_Model extends CI_Model {
             'item_id'   => $itemID,
             'count'     => $count,
             'type_one'  => $typeOne,
-            'type_two'  => $typeTwo
+            'type_two'  => $typeTwo,
+            'backup'  => $backup
         ));
 
         return $this->db->insert_id();

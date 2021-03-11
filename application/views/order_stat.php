@@ -195,16 +195,16 @@
 
         for (name in grp) {
             tbl = tableTmpl.clone();
-            tbl.find('thead').html('<tr><th colspan="4">' + name + '</th></tr><tr><th width="155px">品項</th><th>單價</th><th>數量</th><th>總價</th></tr>');
+            tbl.find('thead').html('<tr><th colspan="4">' + name + '</th></tr><tr><th width="155px">品項</th><th>單價</th><th>數量</th><th>備註</th><th>總價</th></tr>');
 
             html = '';
 
             for (item in grp[name]) {
-                html += "<tr><td>" + grp[name][item].item + "</td><td>" + grp[name][item].price + "</td><td>" + grp[name][item].count + "</td><td>" + grp[name][item].total_price + "</td></tr>";
+                html += "<tr><td>" + grp[name][item].item + "</td><td>" + grp[name][item].price + "</td><td>" + grp[name][item].count + "</td><td>" +  grp[name][item].backup + "</td><td style='min-width:80px'>" + grp[name][item].total_price + "</td></tr>";
             }
 
             totalPrice = _.reduce(_.pluck(grp[name], 'total_price'), function(memo, num){ return parseInt(memo, 10) + parseInt(num, 10) }, 0);
-            html += '<tr><td colspan="3">總價</td><td>' + totalPrice + '</td></tr>';
+            html += '<tr><td colspan="4">總價</td><td>' + totalPrice + '</td></tr>';
 
             tbl.find('tbody').html(html);
             container.append(tbl);

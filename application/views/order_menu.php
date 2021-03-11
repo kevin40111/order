@@ -79,6 +79,7 @@
                             <i class='icon-remove del-order'></i>
                         </span>
                     </p>
+                    <span class='muted'><?=$order->backup?></span>
                     <p class='muted'><?= $order->type_one?>, <?= $order->type_two?></p>
                 </li>
                 <? endforeach;?>
@@ -150,16 +151,6 @@
 
     $("#menu a:first").tab('show');
 
-	if($("#menu a:first").text() == "黑丸嫩仙草")
-		window.open("/static/images/black_ball.jpg", "menu", config="width=500,height=500");
-
-    $("#menu").delegate('a', 'click', function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-		if($(this).text() == "黑丸嫩仙草")
-			window.open("/static/images/black_ball.jpg", "menu", config="width=500,height=500");
-    });
-
     $(".tab-content")
         .delegate('a.order-it', 'click', function (e) {
             var $this = $(this),
@@ -184,7 +175,11 @@
 
                 div = $("<div>").addClass('option hide').append(select1, select2);
                 txt = $("<span>").text('數量: ').appendTo(div);
-                input = $("<input>").attr('type', 'text').attr('maxlength', '2').addClass('count').val(1).appendTo(div);
+                input = $("<input>").attr('type', 'text').attr('name', 'count').attr('maxlength', '2').addClass('count').val(1).appendTo(div);
+
+                backuptxt = $("<span>").text('備註: ').appendTo(div);
+                backuptxtInput = $("<input>").attr('type', 'text').attr('name', 'backup').appendTo(div);
+
                 btn = $("<a>").attr('href', '#submit').addClass('btn btn-primary add-item').html('<i class="icon-white icon-plus"></i> 加入').appendTo(div);
                 td.append(div);
             }
@@ -198,14 +193,15 @@
                 td = $this.parents('td'),
                 typeFirst = td.find('select:first').val() || -1,
                 typeSecond = td.find('select:eq(1)').val() || -1,
-                count = td.find('input').val(),
+                count = td.find('input[name=count]').val(),
                 ul = $("#user-order"),
                 priceCount = parseInt(price, 10) * parseInt(count, 10),
                 totalPrice = $("#total-price");
+                backup = td.find('input[name=backup]').val(),
 
             e.preventDefault();
 
-            $.post('/order/add_item_order', {orderID: orderID, itemID: itemID, count: count, type_one: typeFirst, type_two: typeSecond}, function (json){
+            $.post('/order/add_item_order', {orderID: orderID, itemID: itemID, count: count, type_one: typeFirst, type_two: typeSecond, backup: backup}, function (json){
                 if (json.status === 'success') {
                     ul.append("<li data-id='" + json.insertID + "'><p>" + name + " x" + count + " <span class='pull-right item-total-price'>" + priceCount + " <i class='icon-remove del-order'></i></span></p><p class='muted'>" + $("option[value='" + typeFirst + "']:first").text() + ", " + $("option[value='" + typeSecond + "']:first").text() + "</p></li>");
                     totalPrice.text(parseInt(totalPrice.text(), 10) + priceCount);
