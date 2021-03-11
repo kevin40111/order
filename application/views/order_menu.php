@@ -151,6 +151,11 @@
 
     $("#menu a:first").tab('show');
 
+    $("#menu").delegate('a', 'click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
     $(".tab-content")
         .delegate('a.order-it', 'click', function (e) {
             var $this = $(this),
